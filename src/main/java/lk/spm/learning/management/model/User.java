@@ -2,6 +2,8 @@ package lk.spm.learning.management.model;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.lang.NonNull;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -34,7 +36,30 @@ public class User {
 
     @Column(name = "type")
     private String type;
+    
+    @Column(name = "year_of_enroll")
+    private String year_of_enroll;
+    
+    @Column(name = "study_programm")
+    @ElementCollection(targetClass=Course.class)
+    private List<Course> study_programm;
 
+    public void setStudyProgramm(List<Course> study_programm) {
+        this.study_programm = study_programm;
+    }
+    
+    public List<Course> getStudyProgramm() {
+        return study_programm;
+    }
+    
+    public void setYearOfEnroll(String year_of_enroll) {
+        this.year_of_enroll = year_of_enroll;
+    }
+    
+    public String getYearOfEnroll() {
+        return year_of_enroll;
+    }
+    
     public long getId() {
         return id;
     }

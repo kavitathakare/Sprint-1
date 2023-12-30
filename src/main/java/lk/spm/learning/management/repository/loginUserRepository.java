@@ -1,6 +1,5 @@
 package lk.spm.learning.management.repository;
 
-import lk.spm.learning.management.model.Class;
 import lk.spm.learning.management.model.User;
 import lk.spm.learning.management.model.loginUser;
 import org.springframework.stereotype.Repository;

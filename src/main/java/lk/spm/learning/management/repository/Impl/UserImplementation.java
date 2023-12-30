@@ -1,8 +1,6 @@
 package lk.spm.learning.management.repository.Impl;
-import lk.spm.learning.management.mappers.ClassMapper;
 import lk.spm.learning.management.model.*;
 import lk.spm.learning.management.mappers.PersonMapper;
-import lk.spm.learning.management.model.Class;
 import lk.spm.learning.management.repository.loginUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -75,47 +73,12 @@ public class UserImplementation implements loginUserRepository {
         return users;
     }
 
-    //get Tutor count
-    public List<TutorCountData> getTutorListFromClasses() {
-        String sql = "SELECT name,COUNT(tutor_name) AS tutorCount FROM images GROUP BY name";
-        return namedParameterJdbcTemplate.query(sql, (rs, i) -> permissionMapperNew(rs));
-    }
-
-    private TutorCountData permissionMapperNew(ResultSet rs) throws SQLException {
-       TutorCountData data = new TutorCountData();
-       data.setClassName(rs.getString("name"));
-       data.setCount(rs.getString("tutorCount"));
-        return data;
-    }
-
-    //get Announcement count
-    public List<AnnouncementCountData> getAnnListFromClasses() {
-        String sql = "SELECT name,COUNT(header) AS count FROM announcements GROUP BY name";
-        return namedParameterJdbcTemplate.query(sql, (rs, i) -> permissionMapperAnn(rs));
-    }
-
-    private AnnouncementCountData permissionMapperAnn(ResultSet rs) throws SQLException {
-        AnnouncementCountData data = new AnnouncementCountData();
-        data.setClassName(rs.getString("name"));
-        data.setCount(rs.getString("count"));
-        return data;
-    }
-
-
     @Override
     public List<User> getUserList() {
         String sql = "SELECT * FROM users order by id";
         List<User> users = jdbcTemplate.query(sql, new PersonMapper());
         System.out.println(users);
         return users;
-    }
-
-    @Override
-    public List<Class> getClassList() {
-        String sql = "SELECT * FROM classes order by id";
-        List<Class> classes = jdbcTemplate.query(sql, new ClassMapper());
-        System.out.println(classes);
-        return classes;
     }
 
     @Override
@@ -154,23 +117,9 @@ public class UserImplementation implements loginUserRepository {
         }
     }
 
-    /**
-     *
-     * Tutor functionality.
-     *
-     **/
-
-    public List<ChartData> getGraphData () {
-        String sql = "SELECT COUNT(DISTINCT id) AS count, course AS category\n" +
-                "FROM files\n" +
-                "GROUP BY course";
-           return namedParameterJdbcTemplate.query(sql, (rs, i) -> permissionMapper(rs));
-    }
-
-    private ChartData permissionMapper(ResultSet rs) throws SQLException {
-        ChartData data = new ChartData();
-        data.setCategory(rs.getString("category"));
-        data.setCount(rs.getString("count"));
-        return data;
-    }
+	@Override
+	public List<Class> getClassList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

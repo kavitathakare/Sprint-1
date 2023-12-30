@@ -20,7 +20,7 @@ public class CourseController {
 
 
     //GET EMPLOYEES
-    @GetMapping("/courses")
+    @GetMapping("/course")
     public ResponseEntity<?> getCourse(){
         List<Course> courses = courseRepository.findAll();
         if(courses.size() > 0){
@@ -29,8 +29,9 @@ public class CourseController {
             return new ResponseEntity<>("No Course Available", HttpStatus.NOT_FOUND);
         }
     }
+    
     //GET EMPLOYEE BY ID
-    @GetMapping("/courses/{id}")
+    @GetMapping("/course/{id}")
     public ResponseEntity<?> getCourseById(@PathVariable long id){
 
         Optional<Course> courses = courseRepository.findById(id);
@@ -52,6 +53,19 @@ public class CourseController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+    
+    //GET EMPLOYEE BY ID
+    @GetMapping("course/student/{id}/all")
+    public ResponseEntity<?> getStudentCoursesById(@PathVariable long id){
+
+        Optional<Course> courses = courseRepository.findById(id);
+        if(courses.isPresent()){
+            return new ResponseEntity<>(courses.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("No Course Available", HttpStatus.NOT_FOUND);
+        }
+    }
+    
     //UPDATE EMPLOYEE
     @PutMapping("course/{id}")
     public ResponseEntity<?> updateCourse(@PathVariable(value = "id") Long employeeId, @RequestBody Course updatedCourse){
@@ -76,6 +90,23 @@ public class CourseController {
         try {
             courseRepository.deleteById(courseId);
             return new ResponseEntity<String>("Item Deleted" + courseId, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+    
+  //SAVE EMPLOYEE
+    @PostMapping("delete/course")
+    public ResponseEntity<?> createCourse(@RequestBody List<Long> courseIds){
+        try {
+            System.out.println("courseIds are " + courseIds);
+            if(courseIds.size() <= 0) {
+            	return new ResponseEntity<Course>(HttpStatus.BAD_REQUEST);
+            }
+            courseIds.forEach(id -> {
+            	courseRepository.deleteById(id);
+            });
+            return new ResponseEntity<Course>(HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

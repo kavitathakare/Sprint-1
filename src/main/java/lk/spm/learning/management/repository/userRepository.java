@@ -1,7 +1,5 @@
 package lk.spm.learning.management.repository;
 
-import lk.spm.learning.management.model.Item;
-
 import lk.spm.learning.management.model.User;
 import lk.spm.learning.management.model.loginUser;
 import org.springframework.data.jpa.repository.JpaRepository;

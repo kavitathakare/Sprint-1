@@ -30,7 +30,7 @@ public class userController {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/users")
+    @GetMapping("/listusers")
     public ResponseEntity<?> getAllUsers(){
         List<User> users = loginUserRepository.getUserList();
         if(users.size() > 0){
@@ -168,29 +168,8 @@ public class userController {
             updateUser.setStatus(user.getStatus() != null ? user.getStatus() : updateUser.getStatus());
             updateUser.setPassword(user.getPassword() != null ? user.getPassword() : updateUser.getPassword());
             updateUser.setType(user.getType() != null ? user.getType() : updateUser.getType());
-            User value = userRepository.save(updateUser);
-            //System.out.println("hi " + updateUser);
-            return new ResponseEntity<>(value, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>("No User Available", HttpStatus.NOT_FOUND);
-        }
-    }
-
-    //Update user
-    @PutMapping("/students/{id}")
-    public ResponseEntity<?> updateStudent(@PathVariable("id") Long id, @RequestBody User user){
-        Optional<User> userUpdate = Optional.ofNullable(userRepository.getById(id));
-        System.out.println("user updated " + userUpdate.isPresent());
-        if(userUpdate.isPresent()){
-            User updateUser = userUpdate.get();
-            //updateUser.setId(user.getId()  != 0 ? user.getId() : updateUser.getId());
-            updateUser.setName(user.getName() != null ? user.getName() : updateUser.getName());
-            updateUser.setEmail(user.getEmail() != null ? user.getEmail() : updateUser.getEmail());
-            updateUser.setAge(user.getAge() != null ? user.getAge() : updateUser.getAge());
-            updateUser.setUsername(user.getUsername() != null ? user.getUsername() : updateUser.getUsername());
-            updateUser.setStatus(user.getStatus() != null ? user.getStatus() : updateUser.getStatus());
-            updateUser.setPassword(user.getPassword() != null ? user.getPassword() : updateUser.getPassword());
-            updateUser.setType(user.getType() != null ? user.getType() : updateUser.getType());
+            updateUser.setYearOfEnroll(user.getYearOfEnroll() != null ? user.getYearOfEnroll(): updateUser.getYearOfEnroll());
+            updateUser.setStudyProgramm(user.getStudyProgramm() != null ? user.getStudyProgramm() : updateUser.getStudyProgramm());
             User value = userRepository.save(updateUser);
             //System.out.println("hi " + updateUser);
             return new ResponseEntity<>(value, HttpStatus.OK);
@@ -205,6 +184,18 @@ public class userController {
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id){
         userRepository.deleteById(id);
         return new ResponseEntity<>("delete successful", HttpStatus.OK);
+    }
+    
+    //Delete user
+    @PostMapping("/deleteusers")
+    public ResponseEntity<?> deleteUser(@RequestBody List<Long> userList){
+    	if(userList.size() <=0) {
+    		return new ResponseEntity<>("delete fail", HttpStatus.BAD_REQUEST);
+    	}
+    	userList.forEach(userId -> {
+    		userRepository.deleteById(userId);
+    	});
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 
